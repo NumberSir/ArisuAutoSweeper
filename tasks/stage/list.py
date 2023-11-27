@@ -22,11 +22,11 @@ class StageList:
             swipe_direction: str = "down"
     ):
         self.name = name
-        self.stage = button_list if button_list else STAGE_LIST
-        self.index_ocr = Ocr(button_index if button_index else OCR_INDEX, lang='en')
-        self.stage_item = (button_item if button_item else STAGE_ITEM).button
-        self.enter = button_enter if button_enter else STAGE_ENTER
-        self.sweepable = button_stars if button_stars else STAGE_STARS
+        self.stage = button_list or STAGE_LIST
+        self.index_ocr = Ocr(button_index or OCR_INDEX, lang='en')
+        self.stage_item = (button_item or STAGE_ITEM).button
+        self.enter = button_enter or STAGE_ENTER
+        self.sweepable = button_stars or STAGE_STARS
         self.swipe_direction = swipe_direction
 
         self.current_index_min = 1
