@@ -177,8 +177,7 @@ class ButtonWrapper(Resource):
             if isinstance(assets, Button):
                 yield assets
             elif isinstance(assets, list):
-                for asset in assets:
-                    yield asset
+                yield from assets
 
     @cached_property
     def buttons(self) -> t.List[Button]:
@@ -310,10 +309,7 @@ class ButtonWrapper(Resource):
 class ClickButton:
     def __init__(self, area, button=None, name='CLICK_BUTTON'):
         self.area = area
-        if button is None:
-            self.button = area
-        else:
-            self.button = button
+        self.button = area if button is None else button
         self.name = name
 
     def __str__(self):

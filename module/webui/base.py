@@ -112,7 +112,7 @@ class Frame(Base):
     @staticmethod
     def collapse_menu() -> None:
         run_js(
-            f"""
+            """
             $("#pywebio-scope-menu").addClass("container-menu-collapsed");
             $(".container-content-collapsed").removeClass("container-content-collapsed");
         """
@@ -121,7 +121,7 @@ class Frame(Base):
     @staticmethod
     def expand_menu() -> None:
         run_js(
-            f"""
+            """
             $(".container-menu-collapsed").removeClass("container-menu-collapsed");
             $("#pywebio-scope-content").addClass("container-content-collapsed");
         """
@@ -141,13 +141,12 @@ class Frame(Base):
         if isinstance(keys, str):
             keys = [keys]
         keys = ["_".join(key.split(".")) for key in keys]
-        js = "".join(
+        if js := "".join(
             [
                 f"""$(".form-control[name='{key}']").addClass('is-invalid');"""
                 for key in keys
             ]
-        )
-        if js:
+        ):
             run_js(js)
         # for key in keys:
         #     pin_update(key, valid_status=False)
@@ -157,13 +156,12 @@ class Frame(Base):
         if isinstance(keys, str):
             keys = [keys]
         keys = ["_".join(key.split(".")) for key in keys]
-        js = "".join(
+        if js := "".join(
             [
                 f"""$(".form-control[name='{key}']").removeClass('is-invalid');"""
                 for key in keys
             ]
-        )
-        if js:
+        ):
             run_js(js)
         # for key in keys:
         # pin_update(key, valid_status=0)

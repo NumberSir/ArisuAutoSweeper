@@ -52,14 +52,8 @@ class AssetsImage:
             self.server = res.group('server')
             self.module = res.group('module')
             self.assets = res.group('assets')
-            if res.group('frame'):
-                self.frame = int(res.group('frame').strip('.'))
-            else:
-                self.frame = 1
-            if res.group('attr'):
-                self.attr = res.group('attr').strip('.')
-            else:
-                self.attr = ''
+            self.frame = int(res.group('frame').strip('.')) if res.group('frame') else 1
+            self.attr = res.group('attr').strip('.') if res.group('attr') else ''
             self.parent_file = f'{prefix}{res.group(1)}.png'
         else:
             logger.info(f'Invalid assets name: {self.file}')
@@ -184,17 +178,12 @@ def iter_assets():
         print(path, frames)
         # If `search` attribute is set in the first frame, apply to all
         first = frames[1]
-        if first.search:
-            for frame in frames.values():
+        for frame in frames.values():
+            if first.search:
                 frame.search = first.search
-        else:
-            for frame in frames.values():
-                if frame.search:
-                    # Follow frame specific `search`
-                    pass
-                else:
-                    # Generate `search` from `area`
-                    frame.search = DataAssets.area_to_search(frame.area)
+            elif not frame.search:
+                # Generate `search` from `area`
+                frame.search = DataAssets.area_to_search(frame.area)
 
     return data
 
@@ -225,15 +214,12 @@ def generate_code():
             has_share = SHARE_SERVER in assets_data
             with gen.Object(key=assets, object_class='ButtonWrapper'):
                 gen.ObjectAttr(key='name', value=assets)
-                if has_share:
-                    servers = assets_data.keys()
-                else:
-                    servers = VALID_LANG
+                servers = assets_data.keys() if has_share else VALID_LANG
                 for server in servers:
                     frames = list(assets_data.get(server, {}).values())
                     if len(frames) > 1:
                         with gen.ObjectAttr(key=server, value=gen.List()):
-                            for index, frame in enumerate(frames):
+                            for frame in frames:
                                 with gen.ListItem(gen.Object(object_class='Button')):
                                     gen.ObjectAttr(key='file', value=frame.file)
                                     gen.ObjectAttr(key='area', value=frame.area)

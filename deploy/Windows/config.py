@@ -99,7 +99,7 @@ class DeployConfig(ConfigModel):
                 continue
             logger.info(f"{k}: {v}")
 
-        logger.info(f"Rest of the configs are the same as default")
+        logger.info("Rest of the configs are the same as default")
 
     def read(self):
         self.config = poor_yaml_read(DEPLOY_TEMPLATE)
@@ -180,10 +180,9 @@ class DeployConfig(ConfigModel):
         """
         command = command.replace(r"\\", "/").replace("\\", "/").replace('"', '"')
         if not output:
-            command = command + ' >nul 2>nul'
+            command = f'{command} >nul 2>nul'
         logger.info(command)
-        error_code = os.system(command)
-        if error_code:
+        if error_code := os.system(command):
             if allow_failure:
                 logger.info(f"[ allowed failure ], error_code: {error_code}")
                 return False
@@ -192,7 +191,7 @@ class DeployConfig(ConfigModel):
                 self.show_error(command)
                 raise ExecutionError
         else:
-            logger.info(f"[ success ]")
+            logger.info("[ success ]")
             return True
 
     def subprocess_execute(self, cmd, timeout=10):

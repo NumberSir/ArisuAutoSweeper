@@ -74,10 +74,7 @@ class Cafe(CafeUI):
             case CafeStatus.CHECK:
                 buttons = self.get_clickable_buttons()
                 if not self.is_adjust_on:
-                    if not buttons:
-                        return CafeStatus.FINISHED
-                    else:
-                        return CafeStatus.CLICK
+                    return CafeStatus.FINISHED if not buttons else CafeStatus.CLICK
                 if not buttons:
                     self.check += 1
                 else:
@@ -174,14 +171,13 @@ class Cafe(CafeUI):
                 logger.attr('Status', status)
                 status = self._handle_cafe(status)
 
-            if not self.is_second_cafe_on:
-                if status is CafeStatus.FINISHED:
-                    logger.info('Second cafe is not supported or disabled')
-                    logger.info('Cafe finished')
-                    break
-            else:
+            if self.is_second_cafe_on:
                 if is_second and status is CafeStatus.FINISHED:
                     logger.info('Cafe finished')
                     break
 
+            elif status is CafeStatus.FINISHED:
+                logger.info('Second cafe is not supported or disabled')
+                logger.info('Cafe finished')
+                break
         self.config.task_delay(server_update=True, minute=180)

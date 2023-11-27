@@ -7,9 +7,8 @@ def get_assets_from_file(file):
     assets = set()
     regex = re.compile(r"file='(.*?)'")
     with open(file, 'r', encoding='utf-8') as f:
-        for row in f.readlines():
-            result = regex.search(row)
-            if result:
+        for row in f:
+            if result := regex.search(row):
                 assets.add(result.group(1))
     return assets
 
@@ -46,9 +45,7 @@ class Resource:
             return True
         if hasattr(obj, 'image') and obj.image is not None:
             return True
-        if hasattr(obj, 'buttons') and obj.buttons is not None:
-            return True
-        return False
+        return bool(hasattr(obj, 'buttons') and obj.buttons is not None)
 
     @classmethod
     def resource_show(cls):

@@ -45,19 +45,16 @@ class RouteExtract:
         for result in regex.findall(content):
             func, data = result
 
-            res = re.search(r'plane=([a-zA-Z_]*)', data)
-            if res:
+            if res := re.search(r'plane=([a-zA-Z_]*)', data):
                 plane = res.group(1)
             else:
                 # Must contain plane
                 continue
-            res = re.search(r'floor=([\'"a-zA-Z0-9_]*)', data)
-            if res:
+            if res := re.search(r'floor=([\'"a-zA-Z0-9_]*)', data):
                 floor = res.group(1).strip('"\'')
             else:
                 floor = 'F1'
-            res = re.search(r'position=\(([0-9.]*)[, ]+([0-9.]*)', data)
-            if res:
+            if res := re.search(r'position=\(([0-9.]*)[, ]+([0-9.]*)', data):
                 position = (float(res.group(1)), float(res.group(2)))
             else:
                 position = None

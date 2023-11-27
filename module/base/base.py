@@ -167,11 +167,7 @@ class ModuleBase:
             button(Button, tuple): Button instance or area tuple.
             copy:
         """
-        if isinstance(button, Button):
-            return crop(self.device.image, button.area, copy=copy)
-        elif isinstance(button, ButtonWrapper):
-            return crop(self.device.image, button.area, copy=copy)
-        elif hasattr(button, 'area'):
+        if isinstance(button, (Button, ButtonWrapper)) or hasattr(button, 'area'):
             return crop(self.device.image, button.area, copy=copy)
         else:
             return crop(self.device.image, button, copy=copy)
