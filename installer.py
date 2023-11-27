@@ -1,6 +1,5 @@
 import argparse
 import sys
-import typing as t
 
 sys.stdout.reconfigure(encoding='utf-8')
 sys.stderr.reconfigure(encoding='utf-8')
@@ -20,7 +19,7 @@ def run_print_test():
     run()
 
 
-def run_set(modify=t.List[str]) -> t.Dict[str, str]:
+def run_set(modify: list[str]) -> dict[str, str]:
     data = {}
     for kv in modify:
         if "=" in kv:
