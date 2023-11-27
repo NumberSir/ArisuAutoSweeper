@@ -32,9 +32,7 @@ class Login(UI):
 
         @Config.when(Emulator_GameLanguage='en')
         def _handle_survey(self):
-            if self.appear_then_click(SURVEY):
-                return True
-            return False
+            return self.appear_then_click(SURVEY)
 
         @Config.when(Emulator_GameLanguage=None)
         def _handle_survey(self):
