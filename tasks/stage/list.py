@@ -111,7 +111,7 @@ class StageList:
 
             if index < self.current_index_min:
                 self.swipe_page(self.swipe_direction, main, reverse=True)
-            elif index > self.current_index_max:
+            else:
                 self.swipe_page(self.swipe_direction, main)
 
             main.wait_until_stable(

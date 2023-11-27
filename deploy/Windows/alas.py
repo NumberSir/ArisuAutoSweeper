@@ -59,7 +59,7 @@ class AlasManager(DeployConfig):
 
     def alas_kill(self):
         for _ in range(10):
-            logger.hr(f'Kill existing Alas', 0)
+            logger.hr('Kill existing Alas', 0)
             proc_list = list(self.iter_process_by_names(['python.exe'], in_alas=True))
             if not len(proc_list):
                 Progress.KillExisting()

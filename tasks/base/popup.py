@@ -13,19 +13,17 @@ class PopupHandler(ModuleBase):
         Returns:
             If handled.
         """
-        if self.appear(LOADING_CHECK):
-            timer = Timer(0.5).start()
-            while 1:
-                if timer.reached_and_reset():
-                    self.device.screenshot()
-                    if self.appear(LOADING_CHECK):
-                        self.device.stuck_record_clear()
-                        continue
-                    else:
-                        break
-            return True
-
-        return False
+        if not self.appear(LOADING_CHECK):
+            return False
+        timer = Timer(0.5).start()
+        while 1:
+            if timer.reached_and_reset():
+                self.device.screenshot()
+                if self.appear(LOADING_CHECK):
+                    self.device.stuck_record_clear()
+                else:
+                    break
+        return True
 
     def handle_reward(self) -> bool:
         """
@@ -51,24 +49,15 @@ class PopupHandler(ModuleBase):
             return True
 
     def handle_daily_news(self, interval=2) -> bool:
-        if self.appear_then_click(DAILY_NEWS, interval=interval):
-            return True
-
-        return False
+        return bool(self.appear_then_click(DAILY_NEWS, interval=interval))
 
     def handle_daily_reward(self, interval=2) -> bool:
-        if self.appear_then_click(DAILY_REWARD, interval=interval):
-            return True
-
-        return False
+        return bool(self.appear_then_click(DAILY_REWARD, interval=interval))
 
     def handle_network_reconnect(self, interval=5) -> bool:
         if self.appear_then_click(NETWORK_RECONNECT, interval=interval):
             return True
-        if self.appear_then_click(NETWORK_RECONNECT_OK, interval=interval):
-            return True
-
-        return False
+        return bool(self.appear_then_click(NETWORK_RECONNECT_OK, interval=interval))
 
     def handle_affection_level_up(self) -> bool:
         if self.appear_then_click(AFFECTION_LEVEL_UP):
@@ -83,25 +72,13 @@ class PopupHandler(ModuleBase):
         return False
 
     def handle_new_student(self, interval=5) -> bool:
-        if self.appear_then_click(GET_NEW_STUDENT, interval=interval):
-            return True
-
-        return False
+        return bool(self.appear_then_click(GET_NEW_STUDENT, interval=interval))
 
     def handle_ap_exceed(self, interval=5) -> bool:
-        if self.appear_then_click(AP_EXCEED, interval=interval):
-            return True
-
-        return False
+        return bool(self.appear_then_click(AP_EXCEED, interval=interval))
 
     def handle_insufficient_inventory(self, interval=5) -> bool:
-        if self.appear_then_click(INSUFFICIENT_INVENTORY, interval=interval):
-            return True
-
-        return False
+        return bool(self.appear_then_click(INSUFFICIENT_INVENTORY, interval=interval))
 
     def handle_item_expired(self, interval=5) -> bool:
-        if self.appear_then_click(ITEM_EXPIRED, interval=interval):
-            return True
-
-        return False
+        return bool(self.appear_then_click(ITEM_EXPIRED, interval=interval))

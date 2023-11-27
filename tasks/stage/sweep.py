@@ -109,7 +109,7 @@ class StageSweep:
                 case _:
                     logger.warning(f'Invalid sweep mode: {mode}')
             return True
-        logger.warning(f'Invalid sweep setting')
+        logger.warning('Invalid sweep setting')
         return False
 
     def check_sweep(self, main: ModuleBase):
@@ -140,7 +140,7 @@ class StageSweep:
                 logger.info(f'Sweep num reaches {num}')
                 return True
             elif self.current_sweep == 0:
-                logger.info(f'Current sweep num is 0')
+                logger.info('Current sweep num is 0')
                 return False
 
             if retry.reached_and_reset():
@@ -167,7 +167,7 @@ class StageSweep:
                 logger.info("Set sweep max")
                 return True
             elif self.current_sweep == 0:
-                logger.info(f'Current sweep num is 0')
+                logger.info('Current sweep num is 0')
                 return False
 
             if retry.reached_and_reset():
@@ -194,7 +194,7 @@ class StageSweep:
                 logger.info(f'Sweep min reaches {self.min_sweep}')
                 return True
             elif self.current_sweep == 0:
-                logger.info(f'Current sweep num is 0')
+                logger.info('Current sweep num is 0')
                 return False
 
             if retry.reached_and_reset():
@@ -248,5 +248,5 @@ class StageSweep:
                         return False
 
             if status == SweepStatus.FINISH:
-                logger.info(f'Sweep finish')
+                logger.info('Sweep finish')
                 return True

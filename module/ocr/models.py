@@ -30,10 +30,7 @@ def model2lang(model: str) -> str:
     Returns:
         str: In-game language name, defined in VALID_LANG
     """
-    for k, v in DIC_LANG_TO_MODEL.items():
-        if model == v:
-            return k
-    return model
+    return next((k for k, v in DIC_LANG_TO_MODEL.items() if model == v), model)
 
 
 class TextSystem(TextSystem_):

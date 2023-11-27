@@ -45,9 +45,11 @@ class TacticalChallenge(TacticalChallengeUI):
                     return TCStatus.OCR
             case TCStatus.OCR:
                 if self.get_ticket():
-                    if self.current_ticket == 0:
-                        return TCStatus.FINISHED
-                    return TCStatus.SELECT
+                    return (
+                        TCStatus.FINISHED
+                        if self.current_ticket == 0
+                        else TCStatus.SELECT
+                    )
             case TCStatus.SELECT:
                 self.appear_then_click(self.select)
                 if self.appear(PREPARE_CHALLENGE):
@@ -57,9 +59,7 @@ class TacticalChallenge(TacticalChallengeUI):
                 if self.appear(START_CHALLENGE):
                     return TCStatus.SKIP
             case TCStatus.SKIP:
-                if not self.set_skip():
-                    return TCStatus.SKIP
-                return TCStatus.START
+                return TCStatus.SKIP if not self.set_skip() else TCStatus.START
             case TCStatus.START:
                 self.appear_then_click(START_CHALLENGE)
                 if self.appear(CHALLENGE_WIN) or self.appear(CHALLENGE_LOSE):
@@ -70,12 +70,16 @@ class TacticalChallenge(TacticalChallengeUI):
                 if self.appear_then_click(CHALLENGE_LOSE):
                     return TCStatus.LOSE
             case TCStatus.WIN | TCStatus.LOSE:
-                if self.appear_then_click(CHALLENGE_WIN) or self.appear_then_click(CHALLENGE_LOSE):
+                if self.appear_then_click(CHALLENGE_WIN) or self.appear_then_click(
+                    CHALLENGE_LOSE
+                ):
                     return status
                 if self.get_ticket():
-                    if self.current_ticket == 0:
-                        return TCStatus.FINISHED
-                    return TCStatus.FINAL
+                    return (
+                        TCStatus.FINISHED
+                        if self.current_ticket == 0
+                        else TCStatus.FINAL
+                    )
             case TCStatus.FINAL | TCStatus.FINISHED:
                 return status
             case _:

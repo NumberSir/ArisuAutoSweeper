@@ -128,8 +128,10 @@ class Ocr:
         # after proces
         result = self._log_change('after', self.after_process, result)
         result = self._log_change('format', self.format_result, result)
-        logger.attr(name='%s %ss' % (self.name, float2str(time.time() - start_time)),
-                    text=str(result))
+        logger.attr(
+            name=f'{self.name} {float2str(time.time() - start_time)}s',
+            text=str(result),
+        )
         return result
 
     def ocr_multi_lines(self, image_list):
@@ -138,12 +140,14 @@ class Ocr:
         image_list = [self.pre_process(image) for image in image_list]
         # ocr
         result_list = self.model.ocr_lines(image_list)
-        result_list = [(result, score) for result, score in result_list]
+        result_list = list(result_list)
         # after process
         result_list = [(self.after_process(result), score) for result, score in result_list]
         result_list = [(self.format_result(result), score) for result, score in result_list]
-        logger.attr(name="%s %ss" % (self.name, float2str(time.time() - start_time)),
-                    text=str([result for result, _ in result_list]))
+        logger.attr(
+            name=f"{self.name} {float2str(time.time() - start_time)}s",
+            text=str([result for result, _ in result_list]),
+        )
         return result_list
 
     def filter_detected(self, result: BoxedResult) -> bool:
@@ -179,8 +183,10 @@ class Ocr:
         for result in results:
             result.ocr_text = self.after_process(result.ocr_text)
 
-        logger.attr(name='%s %ss' % (self.name, float2str(time.time() - start_time)),
-                    text=str([result.ocr_text for result in results]))
+        logger.attr(
+            name=f'{self.name} {float2str(time.time() - start_time)}s',
+            text=str([result.ocr_text for result in results]),
+        )
         return results
 
     def _match_result(
@@ -202,7 +208,6 @@ class Ocr:
         if not isinstance(keyword_classes, list):
             keyword_classes = [keyword_classes]
 
-        # Digits will be considered as the index of keyword
         if ignore_digit:
             if result.isdigit():
                 return None
@@ -210,12 +215,9 @@ class Ocr:
         # Try in current lang
         for keyword_class in keyword_classes:
             try:
-                matched = keyword_class.find(
-                    result,
-                    lang=lang,
-                    ignore_punctuation=ignore_punctuation
+                return keyword_class.find(
+                    result, lang=lang, ignore_punctuation=ignore_punctuation
                 )
-                return matched
             except ScriptError:
                 continue
 
@@ -301,8 +303,7 @@ class Ocr:
             ignore_punctuation=ignore_punctuation,
             ignore_digit=ignore_digit,
         )
-        button = OcrResultButton(boxed_result, matched_keyword)
-        return button
+        return OcrResultButton(boxed_result, matched_keyword)
 
     def matched_ocr(self, image, keyword_classes, direct_ocr=False) -> list[OcrResultButton]:
         """
@@ -337,12 +338,10 @@ class Digit(Ocr):
         result = super().after_process(result)
         logger.attr(name=self.name, text=str(result))
 
-        res = re.search(r'(\d+)', result)
-        if res:
+        if res := re.search(r'(\d+)', result):
             return int(res.group(1))
-        else:
-            logger.warning(f'No digit found in {result}')
-            return 0
+        logger.warning(f'No digit found in {result}')
+        return 0
 
 
 class DigitCounter(Ocr):
@@ -359,8 +358,7 @@ class DigitCounter(Ocr):
         result = super().after_process(result)
         logger.attr(name=self.name, text=str(result))
 
-        res = re.search(r'(\d+)/(\d+)', result)
-        if res:
+        if res := re.search(r'(\d+)/(\d+)', result):
             groups = [int(s) for s in res.groups()]
             current, total = int(groups[0]), int(groups[1])
             # current = min(current, total)
@@ -413,6 +411,4 @@ class Duration(Ocr):
 
     @staticmethod
     def _sanitize_number(number) -> int:
-        if number is None:
-            return 0
-        return int(number)
+        return 0 if number is None else int(number)

@@ -191,19 +191,24 @@ class DraggableList:
 
     def is_row_selected(self, button: OcrResultButton, main: ModuleBase) -> bool:
         # Having gold letters
-        if main.image_color_count(button, color=self.active_color, threshold=221, count=50):
-            return True
-
-        return False
+        return bool(
+            main.image_color_count(
+                button, color=self.active_color, threshold=221, count=50
+            )
+        )
 
     def get_selected_row(self, main: ModuleBase) -> Optional[OcrResultButton]:
         """
         `load_rows()` must be called before `get_selected_row()`.
         """
-        for row in self.cur_buttons:
-            if self.is_row_selected(row, main=main):
-                return row
-        return None
+        return next(
+            (
+                row
+                for row in self.cur_buttons
+                if self.is_row_selected(row, main=main)
+            ),
+            None,
+        )
 
     def select_row(self, row: Keyword, main: ModuleBase, insight=True, skip_first_screenshot=True):
         """
@@ -236,10 +241,9 @@ class DraggableList:
             if skip_first_load_rows:
                 skip_first_load_rows = False
                 load_rows_interval.reset()
-            else:
-                if load_rows_interval.reached():
-                    self.load_rows(main=main)
-                    load_rows_interval.reset()
+            elif load_rows_interval.reached():
+                self.load_rows(main=main)
+                load_rows_interval.reset()
 
             button = self.keyword2button(row)
             if not button:

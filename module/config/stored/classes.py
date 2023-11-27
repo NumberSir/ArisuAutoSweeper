@@ -63,10 +63,9 @@ class StoredBase:
                     except ValueError:
                         logger.warning(f'{self._name} has invalid attr: {attr}={value}, use default={default}')
                         value = default
-            else:
-                if not isinstance(value, type(default)):
-                    logger.warning(f'{self._name} has invalid attr: {attr}={value}, use default={default}')
-                    value = default
+            elif not isinstance(value, type(default)):
+                logger.warning(f'{self._name} has invalid attr: {attr}={value}, use default={default}')
+                value = default
 
             out[attr] = value
         return out

@@ -89,8 +89,7 @@ class EmulatorInstanceBase:
         Returns:
             int: Instance ID, or None if this is not a MuMu 12 instance
         """
-        res = re.search(r'MuMuPlayer-12.0-(\d+)', self.name)
-        if res:
+        if res := re.search(r'MuMuPlayer-12.0-(\d+)', self.name):
             return int(res.group(1))
         else:
             return None
@@ -238,6 +237,5 @@ class EmulatorManagerBase:
         """
         out = []
         for emulator in self.all_emulators:
-            for exe in emulator.iter_adb_binaries():
-                out.append(exe)
+            out.extend(iter(emulator.iter_adb_binaries()))
         return out

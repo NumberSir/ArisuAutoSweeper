@@ -22,14 +22,10 @@ class ScrimmageUI(UI):
                 return False
 
     def enter_stage(self, index: int) -> bool:
-        if SCRIMMAGE_LIST.select_index_enter(self, index, insight=False):
-            return True
-        return False
+        return bool(SCRIMMAGE_LIST.select_index_enter(self, index, insight=False))
 
     def do_sweep(self, num: int) -> bool:
-        if SCRIMMAGE_SWEEP.do_sweep(self, num=num):
-            return True
-        return False
+        return bool(SCRIMMAGE_SWEEP.do_sweep(self, num=num))
 
     def get_ticket(self):
         """

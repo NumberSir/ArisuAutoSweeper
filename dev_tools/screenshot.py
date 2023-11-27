@@ -80,12 +80,12 @@ print(f'截图将保存到: {output}')
 
 
 def screenshot():
-    print(f'截图中...')
+    print('截图中...')
     image = device.screenshot()
     now = datetime.strftime(datetime.now(), '%Y-%m-%d_%H-%M-%S-%f')
     file = f'{output}/{now}.png'
     image = handle_sensitive_info(image)
-    print(f'截图中...')
+    print('截图中...')
     Image.fromarray(image).save(file)
     print(f'截图已保存到: {file}')
 
