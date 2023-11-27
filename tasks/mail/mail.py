@@ -14,13 +14,14 @@ class Mail(UI):
             self.device.screenshot()
             if self.ui_additional():
                 continue
-            if action_timer.reached_and_reset():
-                if self.match_color(MAIL_RECEIVE):
-                    self.device.click(MAIL_RECEIVE)
-                    logger.info("Receive mail")
-                    continue
-                if self.appear(MAIL_RECEIVED):
-                    logger.info("Mail have been received")
-                    break
+            if not action_timer.reached_and_reset():
+                continue
+            if self.match_color(MAIL_RECEIVE):
+                self.device.click(MAIL_RECEIVE)
+                logger.info("Receive mail")
+                continue
+            if self.appear(MAIL_RECEIVED):
+                logger.info("Mail have been received")
+                break
 
         self.config.task_delay(server_update=True)
