@@ -175,10 +175,10 @@ class UI(MainPage):
         #         self.ui_get_current_page(skip_first_screenshot=skip_first_screenshot)
 
         if self.ui_current == destination:
-            logger.info("Already at %s" % destination)
+            logger.info(f"Already at {destination}")
             return False
         else:
-            logger.info("Goto %s" % destination)
+            logger.info(f"Goto {destination}")
             self.ui_goto(destination, skip_first_screenshot=True)
             return True
 
@@ -278,23 +278,23 @@ class UI(MainPage):
                 break
 
             # Click
-            if click_timer.reached():
-                if process_appear(appear_button):
-                    self.device.click(click_button)
-                    click_timer.reset()
-                    continue
-            if additional is not None:
-                if additional():
-                    continue
+            if click_timer.reached() and process_appear(appear_button):
+                self.device.click(click_button)
+                click_timer.reset()
+                continue
+            if additional is not None and additional():
+                continue
 
-    def is_in_main(self):
-        if self.appear(page_main.check_button):
-            if self.image_color_count(page_main.check_button, color=(235, 235, 235), threshold=221, count=400):
-                return True
-        # if self.appear(MAP_EXIT):
-        #     if self.image_color_count(MAP_EXIT, color=(235, 235, 235), threshold=221, count=50):
-        #         return True
-        return False
+    def is_in_main(self) -> bool:
+        return (
+            self.appear(page_main.check_button)
+            and self.image_color_count(
+                page_main.check_button,
+                color=(235, 235, 235),
+                threshold=221,
+                count=400,
+            )
+        )
 
     def ui_goto_main(self):
         return self.ui_ensure(destination=page_main)
@@ -329,28 +329,18 @@ class UI(MainPage):
         Returns:
             If handled any popup.
         """
-        if self.handle_loading():
-            return True
-        if self.handle_reward_skip():
-            return True
-        if self.handle_reward():
-            return True
-        if self.handle_daily_news():
-            return True
-        if self.handle_network_reconnect():
-            return True
-        if self.handle_affection_level_up():
-            return True
-        if self.handle_new_student():
-            return True
-        if self.handle_ap_exceed():
-            return True
-        if self.handle_insufficient_inventory():
-            return True
-        if self.handle_item_expired():
-            return True
-
-        return False
+        return any([
+            self.handle_loading(),
+            self.handle_reward_skip(),
+            self.handle_reward(),
+            self.handle_daily_news(),
+            self.handle_network_reconnect(),
+            self.handle_affection_level_up(),
+            self.handle_new_student(),
+            self.handle_ap_exceed(),
+            self.handle_insufficient_inventory(),
+            self.handle_item_expired(),
+        ])
 
     def _ui_button_confirm(
             self,

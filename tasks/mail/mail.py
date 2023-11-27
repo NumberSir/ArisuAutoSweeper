@@ -24,3 +24,7 @@ class Mail(UI):
                     break
 
         self.config.task_delay(server_update=True)
+
+        if 1:
+            if 2:
+                pass
