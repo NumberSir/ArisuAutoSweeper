@@ -36,8 +36,7 @@ class CafeUI(UI):
         self.template.matched_button._button_offset = offset
         self.template.load_offset(self.template)
         self.template.load_search(BOX_SEARCH.area)
-        points = self.template.match_multi_template(image, similarity)
-        return points
+        return self.template.match_multi_template(image, similarity)
 
     def reset_cafe_position(self, direction: str):
         width = BOX_CAFE.width
@@ -65,8 +64,7 @@ class CafeUI(UI):
         self.device.click_record_clear()
 
     def cafe_additional(self) -> bool:
-        if self.appear_then_click(INVENTORY):
-            return True
-        if self.appear_then_click(MOMOTALK_CLOSE):
-            return True
-        return False
+        return any([
+            self.appear_then_click(INVENTORY),
+            self.appear_then_click(MOMOTALK_CLOSE),
+        ])
