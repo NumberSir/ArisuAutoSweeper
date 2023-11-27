@@ -73,19 +73,19 @@ class StageSweep:
             button_skip_ok_upper: ButtonWrapper = None,
             button_skip_ok_lower: ButtonWrapper = None,
     ):
-        self.check = button_check if button_check else CHECK_SWEEP
-        self.num = Digit(button_num if button_num else OCR_NUM)
-        self.plus = button_plus if button_plus else PLUS
-        self.minus = button_minus if button_minus else MINUS
-        self.max = button_max if button_max else MAX
-        self.min = button_min if button_min else MIN
-        self.sweep = button_sweep if button_sweep else SWEEP
-        self.sweep_confirm = button_sweep_confirm if button_sweep_confirm else SWEEP_CONFIRM
-        self.enter = button_enter if button_enter else ENTER
-        self.exit = button_exit if button_exit else EXIT
-        self.skip_skip = button_skip_skip if button_skip_skip else SKIP_SKIP
-        self.skip_ok_upper = button_skip_ok_upper if button_skip_ok_upper else SKIP_OK_UPPER
-        self.skip_ok_lower = button_skip_ok_lower if button_skip_ok_lower else SKIP_OK_LOWER
+        self.check = button_check or CHECK_SWEEP
+        self.num = Digit(button_num or OCR_NUM)
+        self.plus = button_plus or PLUS
+        self.minus = button_minus or MINUS
+        self.max = button_max or MAX
+        self.min = button_min or MIN
+        self.sweep = button_sweep or SWEEP
+        self.sweep_confirm = button_sweep_confirm or SWEEP_CONFIRM
+        self.enter = button_enter or ENTER
+        self.exit = button_exit or EXIT
+        self.skip_skip = button_skip_skip or SKIP_SKIP
+        self.skip_ok_upper = button_skip_ok_upper or SKIP_OK_UPPER
+        self.skip_ok_lower = button_skip_ok_lower or SKIP_OK_LOWER
 
     def set_mode(self, mode: str = None, num: int = None) -> bool:
         if num is not None:
@@ -109,7 +109,7 @@ class StageSweep:
                 case _:
                     logger.warning(f'Invalid sweep mode: {mode}')
             return True
-        logger.warning(f'Invalid sweep setting')
+        logger.warning('Invalid sweep setting')
         return False
 
     def check_sweep(self, main: ModuleBase):
@@ -140,7 +140,7 @@ class StageSweep:
                 logger.info(f'Sweep num reaches {num}')
                 return True
             elif self.current_sweep == 0:
-                logger.info(f'Current sweep num is 0')
+                logger.info('Current sweep num is 0')
                 return False
 
             if retry.reached_and_reset():
@@ -167,7 +167,7 @@ class StageSweep:
                 logger.info("Set sweep max")
                 return True
             elif self.current_sweep == 0:
-                logger.info(f'Current sweep num is 0')
+                logger.info('Current sweep num is 0')
                 return False
 
             if retry.reached_and_reset():
@@ -194,7 +194,7 @@ class StageSweep:
                 logger.info(f'Sweep min reaches {self.min_sweep}')
                 return True
             elif self.current_sweep == 0:
-                logger.info(f'Current sweep num is 0')
+                logger.info('Current sweep num is 0')
                 return False
 
             if retry.reached_and_reset():
@@ -248,5 +248,5 @@ class StageSweep:
                         return False
 
             if status == SweepStatus.FINISH:
-                logger.info(f'Sweep finish')
+                logger.info('Sweep finish')
                 return True
